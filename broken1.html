@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Broken card 1 - air quality</title>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 2rem; }
+    .card { border: 1px solid #ccc; border-radius: 8px; padding: 1rem; max-width: 20rem; }
+    .value { font-size: 2.5rem; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Broken card 1</h1>
+  <div class="card">
+    <h2>Air quality</h2>
+    <div class="value" id="aqhi">loading...</div>
+    <div id="station"></div>
+  </div>
+
+  <script>
+    // This card does not work in a browser. Your job is to find out why,
+    // and to fix it. Open the browser console to see what happens.
+    const URL = "https://www.aqhi.gov.hk/epd/ddata/html/out/aqhi_ind_rss_Eng.xml";
+
+    async function loadAirQuality() {
+      const response = await fetch(URL);
+      const text = await response.text();
+      document.getElementById("aqhi").textContent = text.length;
+      document.getElementById("station").textContent = "Central/Western";
+    }
+
+    loadAirQuality();
+  </script>
+</body>
+</html>

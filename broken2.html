@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Broken card 2 - next train</title>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 2rem; }
+    .card { border: 1px solid #ccc; border-radius: 8px; padding: 1rem; max-width: 20rem; }
+    .value { font-size: 2.5rem; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Broken card 2</h1>
+  <div class="card">
+    <h2>Next train</h2>
+    <div class="value" id="mins">loading...</div>
+    <div id="dest"></div>
+  </div>
+
+  <script>
+    // This card LOOKS like it works. It shows a number.
+    // It is wrong in two ways. Find both.
+    //
+    // Fault 1: it never checks json.status. Try changing STA to "XXX"
+    //          (not a real station) and watch what happens.
+    // Fault 2: look hard at the line that displays the minutes.
+    const LINE = "ISL";
+    const STA  = "HKU";   // HKU station, Island line
+    const URL  = `https://rt.data.gov.hk/v1/transport/mtr/getSchedule.php?line=${LINE}&sta=${STA}`;
+
+    async function loadNextTrain() {
+      const response = await fetch(URL);
+      if (!response.ok) {
+        document.getElementById("mins").textContent = "error";
+        return;
+      }
+      const json = await response.json();
+      const trains = json.data[`${LINE}-${STA}`].UP;
+      document.getElementById("mins").textContent = trains[0].ttnt + 1 + " min";
+      document.getElementById("dest").textContent = trains[0].dest;
+    }
+
+    loadNextTrain();
+  </script>
+</body>
+</html>
